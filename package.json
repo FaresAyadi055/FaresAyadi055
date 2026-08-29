@@ -2,11 +2,13 @@
   "name": "Fares_Ayadi",
   "private": true,
   "version": "1.0.0",
+  "homepage": "https://FaresAyadi055.github.io/FaresAyadi055/",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "gh-pages": "^6.3.0",
