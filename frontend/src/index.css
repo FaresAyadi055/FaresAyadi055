@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-ink-deep text-paper font-sans antialiased;
+  background-image:
+    linear-gradient(rgba(111, 183, 232, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(111, 183, 232, 0.07) 1px, transparent 1px);
+  background-size: 34px 34px;
+  background-position: center top;
+}
+
+/* Visible keyboard focus everywhere, react-aria driven */
+:where(button, a, [role='button'], input, textarea)[data-focus-visible] {
+  outline: 2px solid #6fb7e8;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: #3e7cb1;
+  color: #eaf3fb;
+}
+
+/* Thin blueprint scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #08192e;
+}
+::-webkit-scrollbar-thumb {
+  background: #1b3e63;
+  border: 2px solid #08192e;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes draw-line {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+.text-stamp {
+  letter-spacing: 0.14em;
+}
