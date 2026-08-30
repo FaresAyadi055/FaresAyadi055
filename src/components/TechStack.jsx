@@ -24,6 +24,11 @@ const STACK = [
     category: 'Data & ML',
     items: ['NumPy', 'Pandas', 'Matplotlib', 'Scikit-learn', 'PyTorch'],
   },
+  {
+    code: '06',
+    category: 'Mobile',
+    items: ['React Native', 'Android Studio'],
+  },
 ];
 
 export default function TechStack() {
