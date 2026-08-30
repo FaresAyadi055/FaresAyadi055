@@ -1,6 +1,5 @@
-// Base URL of the backend. In dev, Vite proxies /api to the backend (see vite.config.js).
-// In production, set VITE_API_BASE_URL to the deployed backend origin.
-const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
+// Base URL of the backend.
+const API_BASE = 'https://client-service-backend.faresayadi055.workers.dev';
 
 /**
  * Sends a message to the AI spokesperson endpoint.
