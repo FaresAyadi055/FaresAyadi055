@@ -7,7 +7,7 @@ const STACK = [
   {
     code: '02',
     category: 'Frontend',
-    items: ['HTML / CSS / JavaScript', 'React', 'Vue.js', 'Svelte'],
+    items: ['HTML / CSS / JavaScript', 'React', 'Vue.js', 'Svelte', 'TypeScript'],
   },
   {
     code: '03',
