@@ -3,10 +3,10 @@ const API_BASE = 'https://client-service-backend.faresayadi055.workers.dev';
 
 /**
  * Sends a message to the AI spokesperson endpoint.
- * Backend route: POST /api/ai
+ * Backend route: POST /api/chat
  */
 export async function sendChatMessage(messages) {
-  const res = await fetch(`${API_BASE}/api/ai`, {
+  const res = await fetch(`${API_BASE}/api/chat`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ messages }),
