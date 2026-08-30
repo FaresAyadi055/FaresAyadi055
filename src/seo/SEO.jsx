@@ -5,11 +5,11 @@ import { Helmet } from 'react-helmet-async';
  * pages if this project grows beyond a single page (e.g. /services, /work).
  */
 export default function SEO({
-  title = 'Blueprint.dev — Freelance Fullstack Developer & Automation Engineer for Hire',
+  title = 'FaresAyadi.dev — Freelance Fullstack Developer & Automation Engineer for Hire',
   description = 'Freelance fullstack software engineer for hire. Website building, web app development, and business process automation for small and medium businesses.',
   path = '/',
 }) {
-  const url = `https://www.blueprint.dev${path}`;
+  const url = `https://www.FaresAyadi.dev${path}`;
   return (
     <Helmet>
       <title>{title}</title>
