@@ -17,13 +17,14 @@ export default function Navbar() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <a href="#top" className="flex items-center gap-2 font-mono text-sm text-paper">
           <span className="grid h-8 w-8 place-items-center rounded-sm border border-blue-line text-blue-bright">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M2 14V2h8l4 4v8H2Z" stroke="currentColor" strokeWidth="1.2" />
-              <path d="M10 2v4h4" stroke="currentColor" strokeWidth="1.2" />
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
             </svg>
           </span>
           <span className="text-stamp">
-            BLUEPRINT<span className="text-blue-bright">.DEV</span>
+            FARESAYADI<span className="text-blue-bright">.DEV</span>
           </span>
         </a>
 
