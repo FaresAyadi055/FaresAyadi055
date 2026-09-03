@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button, TextField, Input, Label } from 'react-aria-components';
 import { MessageSquare, X, Send } from 'lucide-react';
-import { sendChatMessage, trackEvent } from '../lib/api.js';
+import ReactMarkdown from 'react-markdown';
+import benderIcon from '../asset/bender.png';
+import { sendChatMessage, trackEvent, fetchChatHistory } from '../lib/api.js';
 
 const GREETING = {
   role: 'assistant',
   content:
-    "Hi, I'm the automated spokesperson for this studio. Ask me about services, the tech stack, timelines, or pricing — I'll do my best, and hand you off to a human for anything specific.",
+    "Hi, I'm Bender Bending Rodríguez the automated representative of Fares Ayadi, Ask me about services, the tech stack, timelines, or pricing — I'll do my best, and hand you off to a human for anything specific.",
 };
 
 export default function Chatbot() {
@@ -15,8 +17,28 @@ export default function Chatbot() {
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
   const [error, setError] = useState(null);
+  const [sessionId, setSessionId] = useState(null);
   const inputRef = useRef(null);
   const scrollRef = useRef(null);
+  
+  // Initialize Session
+  useEffect(() => {
+    let id = localStorage.getItem('chat_session_id');
+    if (!id) {
+      id = crypto.randomUUID();
+      localStorage.setItem('chat_session_id', id);
+    }
+    setSessionId(id);
+    
+    // Fetch History
+    fetchChatHistory(id)
+      .then(history => {
+        if (history.length > 0) {
+          setMessages([GREETING, ...history]);
+        }
+      })
+      .catch(err => console.error("Failed to load history", err));
+  }, []);
 
   useEffect(() => {
     if (open) {
@@ -32,7 +54,7 @@ export default function Chatbot() {
   async function handleSend(e) {
     e.preventDefault();
     const text = input.trim();
-    if (!text || sending) return;
+    if (!text || sending || !sessionId) return;
 
     const nextMessages = [...messages, { role: 'user', content: text }];
     setMessages(nextMessages);
@@ -41,7 +63,7 @@ export default function Chatbot() {
     setSending(true);
 
     try {
-      const { reply } = await sendChatMessage(nextMessages);
+      const { reply } = await sendChatMessage(sessionId, nextMessages);
       setMessages((prev) => [...prev, { role: 'assistant', content: reply }]);
     } catch (err) {
       setError('The assistant is unreachable right now — try email or WhatsApp instead.');
@@ -49,6 +71,7 @@ export default function Chatbot() {
       setSending(false);
     }
   }
+
 
   return (
     <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
@@ -59,9 +82,16 @@ export default function Chatbot() {
           className="flex h-[28rem] w-[22rem] max-w-[90vw] flex-col overflow-hidden rounded-sm border border-ink-line bg-ink-deep shadow-2xl shadow-black/40"
         >
           <div className="flex items-center justify-between border-b border-ink-line bg-ink-panel/60 px-4 py-3">
-            <div>
-              <p className="font-mono text-xs uppercase tracking-widest text-blue-bright">AI Spokesperson</p>
-              <p className="font-mono text-[11px] text-paper-dim">Status: online</p>
+            <div className="flex items-center gap-3">
+              <img
+                src={benderIcon}
+                alt="Bender"
+                className="-mt-2 h-9 w-9 rounded-full border border-blue-line bg-ink-deep object-contain p-0.5"
+              />
+              <div>
+                <p className="font-mono text-xs uppercase tracking-widest text-blue-bright">Bender</p>
+                <p className="font-mono text-[11px] text-paper-dim">Status: online</p>
+              </div>
             </div>
             <Button
               onPress={() => setOpen(false)}
@@ -82,12 +112,18 @@ export default function Chatbot() {
                     : 'border border-ink-line bg-ink-panel/40 text-paper-dim'
                 }`}
               >
-                {m.content}
+                {m.role === 'user'
+                  ? m.content
+                  : <div className="markdown"><ReactMarkdown>{m.content}</ReactMarkdown></div>}
               </div>
             ))}
             {sending && (
-              <div className="max-w-[85%] rounded-sm border border-ink-line bg-ink-panel/40 px-3 py-2 text-sm text-paper-dim">
-                Typing…
+              <div className="max-w-[85%] rounded-sm border border-ink-line bg-ink-panel/40 px-4 py-3 text-sm text-paper-dim">
+                <div className="typing-dots" aria-label="Bender is typing">
+                  <span />
+                  <span />
+                  <span />
+                </div>
               </div>
             )}
             {error && <p className="font-mono text-xs text-copper">{error}</p>}
@@ -121,7 +157,7 @@ export default function Chatbot() {
         className="flex items-center gap-2 rounded-full border border-blue-line bg-ink-panel px-4 py-3 font-mono text-xs uppercase tracking-widest text-paper shadow-lg outline-none transition-colors hover:border-blue-bright data-[focus-visible]:border-blue-bright"
       >
         <MessageSquare className="h-4 w-4 text-blue-bright" />
-        {open ? 'Close' : 'Ask the AI'}
+        {open ? 'Close' : 'TALK TO MY AI'}
       </Button>
     </div>
   );

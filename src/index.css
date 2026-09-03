@@ -80,3 +80,127 @@ body {
 .text-stamp {
   letter-spacing: 0.14em;
 }
+
+/* Animated typing dots */
+.typing-dots {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+.typing-dots span {
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: #8fd0f7;
+  animation: typing-bounce 1.2s infinite ease-in-out both;
+}
+.typing-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+.typing-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.typing-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes typing-bounce {
+  0%, 80%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  40% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+/* Markdown content inside chat messages */
+.markdown > * + * {
+  margin-top: 0.5em;
+}
+.markdown p {
+  margin: 0;
+}
+.markdown strong {
+  color: #eaf3fb;
+  font-weight: 600;
+}
+.markdown em {
+  color: #eaf3fb;
+}
+.markdown a {
+  color: #6fb7e8;
+  text-decoration: underline;
+  text-decoration-color: rgba(111, 183, 232, 0.5);
+  text-underline-offset: 2px;
+  word-break: break-word;
+}
+.markdown ul,
+.markdown ol {
+  list-style: revert;
+  padding-left: 1.25rem;
+}
+.markdown code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85em;
+  background: rgba(111, 183, 232, 0.12);
+  border: 1px solid rgba(111, 183, 232, 0.2);
+  border-radius: 3px;
+  padding: 0 0.25em;
+  color: #6fb7e8;
+}
+.markdown pre {
+  overflow-x: auto;
+  background: #08192e;
+  border: 1px solid #1b3e63;
+  border-radius: 4px;
+  padding: 0.65em;
+}
+.markdown pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #eaf3fb;
+}
+.markdown blockquote {
+  border-left: 3px solid #6fb7e8;
+  padding-left: 0.75em;
+  color: #8fd0f7;
+}
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+  color: #eaf3fb;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.markdown h1 {
+  font-size: 1.15em;
+}
+.markdown h2 {
+  font-size: 1.05em;
+}
+.markdown h3 {
+  font-size: 1em;
+}
+.markdown hr {
+  border-color: #1b3e63;
+}
+.markdown table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9em;
+}
+.markdown th,
+.markdown td {
+  border: 1px solid #1b3e63;
+  padding: 0.3em 0.5em;
+  text-align: left;
+}
+.markdown th {
+  color: #eaf3fb;
+}
+

@@ -2,7 +2,7 @@
   "name": "Fares_Ayadi",
   "private": true,
   "version": "1.0.0",
-  "homepage": "https://FaresAyadi055.github.io/FaresAyadi055/",
+  "homepage": "https://FaresAyadi055.github.io/",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -16,7 +16,8 @@
     "react": "^18.3.1",
     "react-aria-components": "^1.4.1",
     "react-dom": "^18.3.1",
-    "react-helmet-async": "^2.0.5"
+    "react-helmet-async": "^2.0.5",
+    "react-markdown": "^10.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",

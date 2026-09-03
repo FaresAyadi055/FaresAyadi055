@@ -1,0 +1,247 @@
+import { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import { fetchAdminAnalytics, fetchAdminChatSessions, fetchAdminChatSession, deleteAdminChatSession } from '../lib/api.js';
+
+function ChatSession({ session, onLoad, onDelete }) {
+  return (
+    <div className="flex items-center justify-between rounded-sm border border-ink-line bg-ink-panel/40 px-4 py-3 text-sm">
+      <button
+        onClick={() => onLoad(session)}
+        className="cursor-pointer text-left font-mono text-blue-bright hover:underline outline-none"
+      >
+        Session: {session.id.slice(0, 8)}…
+      </button>
+      <button
+        onClick={() => onDelete(session.id)}
+        className="rounded-sm border border-copper px-3 py-1 font-mono text-xs text-copper outline-none transition-colors hover:bg-copper hover:text-ink-deep"
+      >
+        Delete
+      </button>
+    </div>
+  );
+}
+
+export default function Admin({ onClose }) {
+  const [authed, setAuthed] = useState(!!localStorage.getItem('ADMIN_ACCESS_TOKEN'));
+  const [checking, setChecking] = useState(false);
+  const [token, setToken] = useState('');
+  const [tokenError, setTokenError] = useState('');
+  const [view, setView] = useState('dashboard');
+  const [analytics, setAnalytics] = useState([]);
+  const [sessions, setSessions] = useState([]);
+  const [selectedSession, setSelectedSession] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [actionMsg, setActionMsg] = useState('');
+
+  useEffect(() => {
+    if (authed) {
+      loadDashboard();
+    }
+  }, [authed]);
+
+  async function loadDashboard() {
+    setLoading(true);
+    try {
+      const [a, s] = await Promise.all([fetchAdminAnalytics(), fetchAdminChatSessions()]);
+      setAnalytics(a.analytics || []);
+      setSessions(s.sessions || []);
+    } catch (err) {
+      setTokenError('Invalid token — please try again.');
+      localStorage.removeItem('ADMIN_ACCESS_TOKEN');
+      setAuthed(false);
+    } finally {
+      setLoading(false);
+      setChecking(false);
+    }
+  }
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    setTokenError('');
+    setChecking(true);
+    localStorage.setItem('ADMIN_ACCESS_TOKEN', token);
+    setAuthed(true);
+  }
+
+  async function handleLogout() {
+    localStorage.removeItem('ADMIN_ACCESS_TOKEN');
+    setAuthed(false);
+    setChecking(false);
+    setSelectedSession(null);
+    setMessages([]);
+    onClose?.();
+  }
+
+  async function handleLoadSession(session) {
+    setSelectedSession(session);
+    setView('chat');
+    try {
+      const data = await fetchAdminChatSession(session.id);
+      setMessages(data.messages || []);
+    } catch {
+      setActionMsg('Failed to load session.');
+    }
+  }
+
+  async function handleDeleteSession(sessionId) {
+    if (!confirm('Delete this session and all its messages?')) return;
+    try {
+      await deleteAdminChatSession(sessionId);
+      setSessions((prev) => prev.filter((s) => s.id !== sessionId));
+      if (selectedSession?.id === sessionId) {
+        setSelectedSession(null);
+        setMessages([]);
+        setView('dashboard');
+      }
+      setActionMsg('Session deleted.');
+    } catch {
+      setActionMsg('Failed to delete session.');
+    }
+  }
+
+  function formatTime(ts) {
+    return new Date(ts).toLocaleString();
+  }
+
+  // Auth gate
+  if (!authed || checking) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink-deep/95">
+        <div className="max-w-md w-full rounded-sm border border-ink-line bg-ink-panel p-8">
+          <h2 className="font-mono text-xl font-semibold text-paper">Admin Access</h2>
+          {checking ? (
+            <p className="mt-2 text-sm text-paper-dim">Validating token&hellip;</p>
+          ) : (
+            <p className="mt-2 text-sm text-paper-dim">Enter the admin access token to open the dashboard.</p>
+          )}
+          <form onSubmit={handleLogin} className="mt-6 space-y-4">
+            <div>
+              <label className="font-mono text-xs uppercase tracking-wider text-paper-dim">Token</label>
+              <input
+                type="text"
+                value={token}
+                onChange={(e) => setToken(e.target.value)}
+                disabled={checking}
+                className="mt-1 w-full rounded-sm border border-ink-line bg-ink-deep px-3 py-2 text-sm text-paper outline-none focus:border-blue-bright disabled:opacity-50"
+                placeholder="ADMIN_ACCESS_TOKEN"
+              />
+            </div>
+            {tokenError && <p className="font-mono text-xs text-copper">{tokenError}</p>}
+            <button
+              type="submit"
+              disabled={checking}
+              className="w-full rounded-sm bg-copper px-4 py-2 font-mono text-sm text-ink-deep outline-none transition-opacity hover:opacity-90 disabled:opacity-50"
+            >
+              {checking ? <span>Validating&hellip;</span> : 'Sign in'}
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex flex-col bg-ink-deep">
+      {/* Header */}
+      <header className="flex items-center justify-between border-b border-ink-line bg-ink-panel/80 px-6 py-3">
+        <h2 className="font-mono text-sm uppercase tracking-widest text-blue-bright">Admin Dashboard</h2>
+        <div className="flex items-center gap-4">
+          {actionMsg && <p className="font-mono text-xs text-copper">{actionMsg}</p>}
+          <button
+            onClick={handleLogout}
+            className="rounded-sm border border-copper px-3 py-1 font-mono text-xs text-copper outline-none transition-colors hover:bg-copper hover:text-ink-deep"
+          >
+            Log out
+          </button>
+        </div>
+      </header>
+
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto px-6 py-6">
+        {view === 'dashboard' && (
+          <div className="space-y-8 max-w-5xl mx-auto">
+            {/* Analytics */}
+            <section>
+              <h3 className="font-mono text-lg font-semibold text-paper mb-4">Page Visitors — Analytics</h3>
+              {analytics.length === 0 ? (
+                <p className="text-paper-dim">No analytics data yet.</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse font-mono text-sm">
+                    <thead>
+                      <tr className="border-b border-ink-line text-paper-dim">
+                        <th className="text-left py-2 px-3">Path</th>
+                        <th className="text-left py-2 px-3">Timestamp</th>
+                        <th className="text-left py-2 px-3">IP</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {analytics.map((row, i) => (
+                        <tr key={row.id || i} className="border-b border-ink-line/40 text-paper">
+                          <td className="py-2 px-3">{row.path}</td>
+                          <td className="py-2 px-3">{formatTime(row.timestamp)}</td>
+                          <td className="py-2 px-3">{row.ipAddress}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </section>
+
+            {/* Chat Sessions */}
+            <section>
+              <h3 className="font-mono text-lg font-semibold text-paper mb-4">AI Chat Sessions</h3>
+              {sessions.length === 0 ? (
+                <p className="text-paper-dim">No chat sessions yet.</p>
+              ) : (
+                <div className="space-y-3">
+                  {sessions.map((session) => (
+                    <ChatSession
+                      key={session.id}
+                      session={session}
+                      onLoad={handleLoadSession}
+                      onDelete={handleDeleteSession}
+                    />
+                  ))}
+                </div>
+              )}
+            </section>
+          </div>
+        )}
+
+        {view === 'chat' && selectedSession && (
+          <div className="max-w-3xl mx-auto">
+            <button
+              onClick={() => { setView('dashboard'); setSelectedSession(null); setMessages([]); }}
+              className="font-mono text-xs uppercase tracking-wider text-blue-bright hover:underline mb-4 outline-none"
+            >
+              ← Back to dashboard
+            </button>
+            <h3 className="font-mono text-sm text-paper-dim mb-4">
+              Session: {selectedSession.id.slice(0, 8)}… ({messages.length} messages)
+            </h3>
+            <div className="space-y-3">
+              {messages.map((m, i) => (
+                <div
+                  key={i}
+                  className={`rounded-sm px-4 py-3 text-sm leading-relaxed ${
+                    m.role === 'user'
+                      ? 'bg-blue-line/20 text-paper ml-auto max-w-[80%]'
+                      : 'border border-ink-line bg-ink-panel/40 text-paper-dim max-w-[80%]'
+                  }`}
+                >
+                  <p className="font-mono text-[11px] uppercase tracking-wider mb-1 text-paper-dim">
+                    {m.role}
+                  </p>
+                  <ReactMarkdown>{m.content}</ReactMarkdown>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

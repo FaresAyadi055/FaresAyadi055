@@ -11,7 +11,8 @@ function scrollTo(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-export default function Navbar() {
+export default function Navbar({ onOpenAdmin }) {
+  const isAdmin = !!localStorage.getItem('ADMIN_ACCESS_TOKEN');
   return (
     <header className="sticky top-0 z-40 border-b border-ink-line/70 bg-ink-deep/85 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
@@ -38,6 +39,14 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
+          {isAdmin && (
+            <button
+              onClick={onOpenAdmin}
+              className="cursor-pointer font-mono text-xs uppercase tracking-widest text-copper outline-none transition-colors hover:text-blue-bright data-[focus-visible]:text-blue-bright"
+            >
+              Admin
+            </button>
+          )}
         </nav>
 
         <Button

@@ -1,15 +1,32 @@
 // Base URL of the backend.
-const API_BASE = 'https://client-service-backend.faresayadi055.workers.dev';
+// In dev, Vite proxies /api to the backend.
+// In production, use the deployed backend origin.
+const API_BASE = import.meta.env.MODE === 'development' 
+  ? '' 
+  : 'https://client-service-backend.faresayadi055.workers.dev';
+
+/**
+ * Fetches existing chat messages for a session.
+ * Backend route: GET /api/chat/:sessionId
+ */
+export async function fetchChatHistory(sessionId) {
+  const res = await fetch(`${API_BASE}/api/chat/${sessionId}`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch chat history (${res.status})`);
+  }
+  const data = await res.json();
+  return data.messages;
+}
 
 /**
  * Sends a message to the AI spokesperson endpoint.
  * Backend route: POST /api/chat
  */
-export async function sendChatMessage(messages) {
+export async function sendChatMessage(sessionId, messages) {
   const res = await fetch(`${API_BASE}/api/chat`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages }),
+    body: JSON.stringify({ sessionId, messages }),
   });
 
   if (!res.ok) {
@@ -25,6 +42,7 @@ export async function sendChatMessage(messages) {
  * Backend route: POST /api/analytics
  */
 export async function trackEvent(event) {
+  if (localStorage.getItem('ADMIN_ACCESS_TOKEN')) return;
   try {
     await fetch(`${API_BASE}/api/analytics`, {
       method: 'POST',
@@ -40,4 +58,38 @@ export async function trackEvent(event) {
   } catch {
     // Analytics failures should never break the UI.
   }
+}
+
+function adminHeaders() {
+  return {
+    'Content-Type': 'application/json',
+    'ADMIN_ACCESS_TOKEN': localStorage.getItem('ADMIN_ACCESS_TOKEN') || '',
+  };
+}
+
+export async function fetchAdminAnalytics() {
+  const res = await fetch(`${API_BASE}/admin/api/analytics`, { headers: adminHeaders() });
+  if (!res.ok) throw new Error('Failed to fetch analytics');
+  return res.json();
+}
+
+export async function fetchAdminChatSessions() {
+  const res = await fetch(`${API_BASE}/admin/api/chat-sessions`, { headers: adminHeaders() });
+  if (!res.ok) throw new Error('Failed to fetch chat sessions');
+  return res.json();
+}
+
+export async function fetchAdminChatSession(sessionId) {
+  const res = await fetch(`${API_BASE}/admin/api/chat/${sessionId}`, { headers: adminHeaders() });
+  if (!res.ok) throw new Error('Failed to fetch chat session');
+  return res.json();
+}
+
+export async function deleteAdminChatSession(sessionId) {
+  const res = await fetch(`${API_BASE}/admin/api/chat/${sessionId}`, {
+    method: 'DELETE',
+    headers: adminHeaders(),
+  });
+  if (!res.ok) throw new Error('Failed to delete chat session');
+  return res.json();
 }
