@@ -48,9 +48,17 @@ export default function Admin({ onClose }) {
       setAnalytics(a.analytics || []);
       setSessions(s.sessions || []);
     } catch (err) {
-      setTokenError('Invalid token — please try again.');
-      localStorage.removeItem('ADMIN_ACCESS_TOKEN');
-      setAuthed(false);
+      if (err.isNetworkError) {
+        // Couldn't reach the server at all (offline, CORS, backend down, etc).
+        // Don't blame the token or log the admin out for this.
+        setTokenError('Could not reach the server — check your connection and try again.');
+      } else if (err.isUnauthorized) {
+        setTokenError('Invalid token — please try again.');
+        localStorage.removeItem('ADMIN_ACCESS_TOKEN');
+        setAuthed(false);
+      } else {
+        setTokenError('Something went wrong loading the dashboard — please try again.');
+      }
     } finally {
       setLoading(false);
       setChecking(false);
@@ -61,7 +69,7 @@ export default function Admin({ onClose }) {
     e.preventDefault();
     setTokenError('');
     setChecking(true);
-    localStorage.setItem('ADMIN_ACCESS_TOKEN', token);
+    localStorage.setItem('ADMIN_ACCESS_TOKEN', token.trim().replace(/^"|"$/g, '').replace(/^'|'$/g, ''));
     setAuthed(true);
   }
 
@@ -145,6 +153,20 @@ export default function Admin({ onClose }) {
         <h2 className="font-mono text-sm uppercase tracking-widest text-blue-bright">Admin Dashboard</h2>
         <div className="flex items-center gap-4">
           {actionMsg && <p className="font-mono text-xs text-copper">{actionMsg}</p>}
+          {loading && <p className="font-mono text-xs text-paper-dim">Loading&hellip;</p>}
+          <button
+            onClick={loadDashboard}
+            disabled={loading}
+            className="rounded-sm border border-ink-line px-3 py-1 font-mono text-xs text-paper-dim outline-none transition-colors hover:border-blue-bright hover:text-blue-bright disabled:opacity-50"
+          >
+            Refresh
+          </button>
+          <button
+            onClick={onClose}
+            className="rounded-sm border border-blue-bright px-3 py-1 font-mono text-xs text-blue-bright outline-none transition-colors hover:bg-blue-bright hover:text-ink-deep"
+          >
+            Back to home page
+          </button>
           <button
             onClick={handleLogout}
             className="rounded-sm border border-copper px-3 py-1 font-mono text-xs text-copper outline-none transition-colors hover:bg-copper hover:text-ink-deep"

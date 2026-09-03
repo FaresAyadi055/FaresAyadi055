@@ -63,33 +63,46 @@ export async function trackEvent(event) {
 function adminHeaders() {
   return {
     'Content-Type': 'application/json',
-    'ADMIN_ACCESS_TOKEN': localStorage.getItem('ADMIN_ACCESS_TOKEN') || '',
+    'Authorization': `Bearer ${localStorage.getItem('ADMIN_ACCESS_TOKEN') || ''}`,
   };
 }
 
-export async function fetchAdminAnalytics() {
-  const res = await fetch(`${API_BASE}/admin/api/analytics`, { headers: adminHeaders() });
-  if (!res.ok) throw new Error('Failed to fetch analytics');
+// Wraps fetch so callers can tell "server said no" (401) apart from
+// network/CORS failures, which are not the same thing as a bad token.
+async function adminFetch(url, options) {
+  let res;
+  try {
+    res = await fetch(url, options);
+  } catch (err) {
+    const networkErr = new Error('Network error while contacting the server.');
+    networkErr.isNetworkError = true;
+    networkErr.cause = err;
+    throw networkErr;
+  }
+  if (!res.ok) {
+    const err = new Error(`Request failed (${res.status})`);
+    err.status = res.status;
+    err.isUnauthorized = res.status === 401;
+    throw err;
+  }
   return res.json();
+}
+
+export async function fetchAdminAnalytics() {
+  return adminFetch(`${API_BASE}/admin/api/analytics`, { headers: adminHeaders() });
 }
 
 export async function fetchAdminChatSessions() {
-  const res = await fetch(`${API_BASE}/admin/api/chat-sessions`, { headers: adminHeaders() });
-  if (!res.ok) throw new Error('Failed to fetch chat sessions');
-  return res.json();
+  return adminFetch(`${API_BASE}/admin/api/chat-sessions`, { headers: adminHeaders() });
 }
 
 export async function fetchAdminChatSession(sessionId) {
-  const res = await fetch(`${API_BASE}/admin/api/chat/${sessionId}`, { headers: adminHeaders() });
-  if (!res.ok) throw new Error('Failed to fetch chat session');
-  return res.json();
+  return adminFetch(`${API_BASE}/admin/api/chat/${sessionId}`, { headers: adminHeaders() });
 }
 
 export async function deleteAdminChatSession(sessionId) {
-  const res = await fetch(`${API_BASE}/admin/api/chat/${sessionId}`, {
+  return adminFetch(`${API_BASE}/admin/api/chat/${sessionId}`, {
     method: 'DELETE',
     headers: adminHeaders(),
   });
-  if (!res.ok) throw new Error('Failed to delete chat session');
-  return res.json();
 }
