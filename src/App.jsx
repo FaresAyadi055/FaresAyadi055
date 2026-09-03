@@ -50,7 +50,7 @@ export default function App() {
         </main>
       )}
       <Footer />
-      <Chatbot />
+      {!isAdmin && <Chatbot />}
     </>
   );
 }

@@ -172,16 +172,30 @@ export default function Admin({ onClose }) {
                     <thead>
                       <tr className="border-b border-ink-line text-paper-dim">
                         <th className="text-left py-2 px-3">Path</th>
-                        <th className="text-left py-2 px-3">Timestamp</th>
+                        <th className="text-left py-2 px-3">Search Engine</th>
+                        <th className="text-left py-2 px-3">Location</th>
+                        <th className="text-left py-2 px-3">Referrer</th>
+                        <th className="text-left py-2 px-3">Device</th>
                         <th className="text-left py-2 px-3">IP</th>
+                        <th className="text-left py-2 px-3">Timestamp</th>
                       </tr>
                     </thead>
                     <tbody>
                       {analytics.map((row, i) => (
                         <tr key={row.id || i} className="border-b border-ink-line/40 text-paper">
                           <td className="py-2 px-3">{row.path}</td>
-                          <td className="py-2 px-3">{formatTime(row.timestamp)}</td>
+                          <td className="py-2 px-3">{row.searchEngine || '—'}</td>
+                          <td className="py-2 px-3">
+                            {[row.city, row.country].filter(Boolean).join(', ') || '—'}
+                          </td>
+                          <td className="py-2 px-3 text-xs">
+                            {row.referrer ? <span className="break-all">{row.referrer}</span> : '—'}
+                          </td>
+                          <td className="py-2 px-3 text-xs">
+                            {row.userAgent ? <span className="break-all">{row.userAgent}</span> : '—'}
+                          </td>
                           <td className="py-2 px-3">{row.ipAddress}</td>
+                          <td className="py-2 px-3">{formatTime(row.timestamp)}</td>
                         </tr>
                       ))}
                     </tbody>
