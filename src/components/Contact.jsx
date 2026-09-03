@@ -1,6 +1,7 @@
 import { Link } from 'react-aria-components';
 import { Mail, Github } from 'lucide-react';
 import { trackEvent } from '../lib/api.js';
+import Reveal from './Reveal.jsx';
 
 function WhatsAppIcon(props) {
   return (
@@ -95,31 +96,32 @@ export default function Contact() {
   return (
     <section id="contact" className="border-b border-ink-line/70 bg-ink-panel/20">
       <div className="mx-auto max-w-6xl px-6 py-24">
-        <header className="mb-14 max-w-2xl">
+        <Reveal as="header" className="mb-14 max-w-2xl">
           <p className="font-mono text-xs uppercase tracking-[0.25em] text-blue-bright">Sign-off</p>
           <h2 className="mt-3 font-mono text-3xl font-semibold text-paper md:text-4xl">Get in touch</h2>
           <p className="mt-4 text-paper-dim">
             Pick whichever channel you already use. I reply within one business day.
           </p>
-        </header>
+        </Reveal>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {CHANNELS.map(({ id, label, value, href, Icon, note }) => (
-            <Link
-              key={id}
-              href={href}
-              target="_blank"
-              rel="noreferrer noopener"
-              onPress={() => trackEvent({ type: 'contact_click', channel: id })}
-              className="group flex cursor-pointer flex-col justify-between rounded-sm border border-ink-line/70 bg-ink-deep p-6 outline-none transition-colors hover:border-blue-bright data-[focus-visible]:border-blue-bright"
-            >
-              <Icon className="h-6 w-6 text-blue-bright" />
-              <div className="mt-6">
-                <p className="font-mono text-sm font-semibold text-paper">{label}</p>
-                <p className="mt-1 truncate font-mono text-xs text-paper-dim">{value}</p>
-                <p className="mt-3 text-xs text-paper-dim/70">{note}</p>
-              </div>
-            </Link>
+          {CHANNELS.map(({ id, label, value, href, Icon, note }, i) => (
+            <Reveal key={id} delay={i * 70}>
+              <Link
+                href={href}
+                target="_blank"
+                rel="noreferrer noopener"
+                onPress={() => trackEvent({ type: 'contact_click', channel: id })}
+                className="group flex h-full cursor-pointer flex-col justify-between rounded-sm border border-ink-line/70 bg-ink-deep p-6 outline-none transition-all duration-300 hover:-translate-y-1 hover:border-blue-bright hover:shadow-[0_8px_24px_-12px_rgba(111,183,232,0.45)] data-[focus-visible]:border-blue-bright"
+              >
+                <Icon className="h-6 w-6 text-blue-bright transition-transform duration-300 group-hover:scale-110" />
+                <div className="mt-6">
+                  <p className="font-mono text-sm font-semibold text-paper">{label}</p>
+                  <p className="mt-1 truncate font-mono text-xs text-paper-dim">{value}</p>
+                  <p className="mt-3 text-xs text-paper-dim/70">{note}</p>
+                </div>
+              </Link>
+            </Reveal>
           ))}
         </div>
       </div>

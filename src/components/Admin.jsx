@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { fetchAdminAnalytics, fetchAdminChatSessions, fetchAdminChatSession, deleteAdminChatSession } from '../lib/api.js';
+import AdminAnalytics from './AdminAnalytics.jsx';
 
 function ChatSession({ session, onLoad, onDelete }) {
   return (
@@ -100,10 +101,6 @@ export default function Admin({ onClose }) {
     }
   }
 
-  function formatTime(ts) {
-    return new Date(ts).toLocaleString();
-  }
-
   // Auth gate
   if (!authed || checking) {
     return (
@@ -164,44 +161,7 @@ export default function Admin({ onClose }) {
             {/* Analytics */}
             <section>
               <h3 className="font-mono text-lg font-semibold text-paper mb-4">Page Visitors — Analytics</h3>
-              {analytics.length === 0 ? (
-                <p className="text-paper-dim">No analytics data yet.</p>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full border-collapse font-mono text-sm">
-                    <thead>
-                      <tr className="border-b border-ink-line text-paper-dim">
-                        <th className="text-left py-2 px-3">Path</th>
-                        <th className="text-left py-2 px-3">Search Engine</th>
-                        <th className="text-left py-2 px-3">Location</th>
-                        <th className="text-left py-2 px-3">Referrer</th>
-                        <th className="text-left py-2 px-3">Device</th>
-                        <th className="text-left py-2 px-3">IP</th>
-                        <th className="text-left py-2 px-3">Timestamp</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {analytics.map((row, i) => (
-                        <tr key={row.id || i} className="border-b border-ink-line/40 text-paper">
-                          <td className="py-2 px-3">{row.path}</td>
-                          <td className="py-2 px-3">{row.searchEngine || '—'}</td>
-                          <td className="py-2 px-3">
-                            {[row.city, row.country].filter(Boolean).join(', ') || '—'}
-                          </td>
-                          <td className="py-2 px-3 text-xs">
-                            {row.referrer ? <span className="break-all">{row.referrer}</span> : '—'}
-                          </td>
-                          <td className="py-2 px-3 text-xs">
-                            {row.userAgent ? <span className="break-all">{row.userAgent}</span> : '—'}
-                          </td>
-                          <td className="py-2 px-3">{row.ipAddress}</td>
-                          <td className="py-2 px-3">{formatTime(row.timestamp)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
+              <AdminAnalytics analytics={analytics} />
             </section>
 
             {/* Chat Sessions */}
