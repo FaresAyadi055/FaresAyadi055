@@ -26,7 +26,7 @@
   {
     "title": "SMU FabLab",
     "description": "Inventory management system with role-based access built with Nuxt.js. Tracks equipment, manages bookings, and handles member access for the university fabrication laboratory.",
-    "productionUrl": "https://fablab.smu.tn",
+    "productionUrl": null,
     "demoUrl": null,
     "githubUrl": "https://github.com/FaresAyadi055/smu-fablab",
     "previewBroken": false
