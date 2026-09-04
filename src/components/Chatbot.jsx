@@ -49,6 +49,7 @@ export default function Chatbot() {
   const [sessionId, setSessionId] = useState(null);
   const inputRef = useRef(null);
   const scrollRef = useRef(null);
+  const waitingForResponse = useRef(false);
 
   useEffect(() => {
     let id = localStorage.getItem('chat_session_id');
@@ -114,13 +115,16 @@ export default function Chatbot() {
     setSending(true);
     setIsStreaming(true);
     setStreamingText('');
+    waitingForResponse.current = true;
 
     try {
       await sendChatMessage(sessionId, nextMessages, {
         onChunk(chunk) {
+          waitingForResponse.current = false;
           setStreamingText(prev => prev + chunk);
         },
         onDone(fullReply) {
+          waitingForResponse.current = false;
           setMessages(prev => [...prev, { role: 'assistant', content: fullReply, timestamp: Date.now() }]);
           setStreamingText('');
           setIsStreaming(false);
@@ -128,6 +132,7 @@ export default function Chatbot() {
         },
       });
     } catch (err) {
+      waitingForResponse.current = false;
       setError('The assistant is unreachable right now — try email or WhatsApp instead.');
       setStreamingText('');
       setIsStreaming(false);
@@ -204,7 +209,7 @@ export default function Chatbot() {
                 </div>
               </div>
             )}
-            {sending && !isStreaming && (
+            {(sending && (waitingForResponse.current || (!streamingText && isStreaming))) && (
               <div className="max-w-[85%] rounded-sm border border-ink-line bg-ink-panel/40 px-4 py-3 text-sm text-paper-dim">
                 <div className="typing-dots" aria-label="Bender is typing">
                   <span />
