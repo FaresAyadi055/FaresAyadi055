@@ -5,23 +5,51 @@ import ReactMarkdown from 'react-markdown';
 import benderIcon from '../asset/bender.png';
 import { sendChatMessage, trackEvent, fetchChatHistory } from '../lib/api.js';
 
-const GREETING = {
-  role: 'assistant',
-  content:
-    "Hi, I'm Bender Bending Rodríguez the automated representative of Fares Ayadi, Ask me about services, the tech stack, timelines, or pricing — I'll do my best, and hand you off to a human for anything specific.",
-};
+const GREETING_TEXT = "Hi, I'm Bender Bending Rodríguez the automated representative of Fares Ayadi, Ask me about services, the tech stack, timelines, or pricing — I'll do my best, and hand you off to a human for anything specific.";
+
+const WORD_DELAY = 80;
+
+function TypewriterText({ text }) {
+  const [visibleWords, setVisibleWords] = useState(0);
+  const words = text.split(' ');
+
+  useEffect(() => {
+    if (visibleWords >= words.length) return;
+    const timer = setTimeout(() => setVisibleWords((w) => w + 1), WORD_DELAY);
+    return () => clearTimeout(timer);
+  }, [visibleWords, words.length]);
+
+  return (
+    <span>
+      {words.slice(0, visibleWords).join(' ')}
+      {visibleWords < words.length && <span className="cursor-blink">▌</span>}
+    </span>
+  );
+}
+
+function StreamedText({ text }) {
+  return (
+    <span>
+      {text}
+      <span className="cursor-blink">▌</span>
+    </span>
+  );
+}
 
 export default function Chatbot() {
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState([GREETING]);
+  const [hasAutoOpened, setHasAutoOpened] = useState(false);
+  const [showGreeting, setShowGreeting] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [streamingText, setStreamingText] = useState('');
+  const [isStreaming, setIsStreaming] = useState(false);
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
   const [error, setError] = useState(null);
   const [sessionId, setSessionId] = useState(null);
   const inputRef = useRef(null);
   const scrollRef = useRef(null);
-  
-  // Initialize Session
+
   useEffect(() => {
     let id = localStorage.getItem('chat_session_id');
     if (!id) {
@@ -29,16 +57,27 @@ export default function Chatbot() {
       localStorage.setItem('chat_session_id', id);
     }
     setSessionId(id);
-    
-    // Fetch History
+
     fetchChatHistory(id)
       .then(history => {
         if (history.length > 0) {
           setMessages([GREETING, ...history]);
         }
+        setShowGreeting(true);
       })
-      .catch(err => console.error("Failed to load history", err));
+      .catch(() => {
+        setShowGreeting(true);
+      });
   }, []);
+
+  useEffect(() => {
+    if (hasAutoOpened) return;
+    const timer = setTimeout(() => {
+      setOpen(true);
+      setHasAutoOpened(true);
+    }, 7000);
+    return () => clearTimeout(timer);
+  }, [hasAutoOpened]);
 
   useEffect(() => {
     if (open) {
@@ -49,26 +88,49 @@ export default function Chatbot() {
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
-  }, [messages, sending]);
+  }, [messages, streamingText, sending]);
+
+  const GREETING = {
+    role: 'assistant',
+    content: GREETING_TEXT,
+  };
+
+  const displayMessages = messages.length > 0 ? messages : (showGreeting ? [GREETING] : []);
 
   async function handleSend(e) {
     e.preventDefault();
     const text = input.trim();
     if (!text || sending || !sessionId) return;
 
+    const greetingMsg = { role: 'assistant', content: GREETING_TEXT };
+    const baseMessages = displayMessages.length === 0 ? [greetingMsg] : displayMessages;
+
     const now = Date.now();
-    const nextMessages = [...messages, { role: 'user', content: text, timestamp: now }];
+    const nextMessages = [...baseMessages, { role: 'user', content: text, timestamp: now }];
     setMessages(nextMessages);
+    setShowGreeting(true);
     setInput('');
     setError(null);
     setSending(true);
+    setIsStreaming(true);
+    setStreamingText('');
 
     try {
-      const { reply } = await sendChatMessage(sessionId, nextMessages);
-      setMessages((prev) => [...prev, { role: 'assistant', content: reply, timestamp: Date.now() }]);
+      await sendChatMessage(sessionId, nextMessages, {
+        onChunk(chunk) {
+          setStreamingText(prev => prev + chunk);
+        },
+        onDone(fullReply) {
+          setMessages(prev => [...prev, { role: 'assistant', content: fullReply, timestamp: Date.now() }]);
+          setStreamingText('');
+          setIsStreaming(false);
+          setSending(false);
+        },
+      });
     } catch (err) {
       setError('The assistant is unreachable right now — try email or WhatsApp instead.');
-    } finally {
+      setStreamingText('');
+      setIsStreaming(false);
       setSending(false);
     }
   }
@@ -104,7 +166,11 @@ export default function Chatbot() {
           </div>
 
           <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
-            {messages.map((m, i) => (
+            {displayMessages.map((m, i) => {
+              const isGreeting = i === 0 && m.role === 'assistant' && m.content === GREETING_TEXT;
+              const showTypewriter = isGreeting && messages.length === 0 && showGreeting;
+
+              return (
                 <div
                   key={i}
                   className={`max-w-[85%] rounded-sm px-3 py-2 text-sm leading-relaxed ${
@@ -115,15 +181,30 @@ export default function Chatbot() {
                 >
                   {m.role === 'user'
                     ? m.content
-                    : <div className="markdown"><ReactMarkdown>{m.content}</ReactMarkdown></div>}
+                    : (
+                      <div className="markdown">
+                        {showTypewriter
+                          ? <TypewriterText text={m.content} />
+                          : <ReactMarkdown>{m.content}</ReactMarkdown>
+                        }
+                      </div>
+                    )}
                   {m.timestamp && (
                     <p className="mt-1 font-mono text-[10px] opacity-60">
                       {new Date(m.timestamp).toLocaleTimeString()}
                     </p>
                   )}
                 </div>
-            ))}
-            {sending && (
+              );
+            })}
+            {isStreaming && streamingText && (
+              <div className="max-w-[85%] rounded-sm border border-ink-line bg-ink-panel/40 px-3 py-2 text-sm leading-relaxed text-paper-dim">
+                <div className="markdown">
+                  <StreamedText text={streamingText} />
+                </div>
+              </div>
+            )}
+            {sending && !isStreaming && (
               <div className="max-w-[85%] rounded-sm border border-ink-line bg-ink-panel/40 px-4 py-3 text-sm text-paper-dim">
                 <div className="typing-dots" aria-label="Bender is typing">
                   <span />
@@ -160,7 +241,7 @@ export default function Chatbot() {
         onPress={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-label={open ? 'Close chat' : 'Open chat with the AI spokesperson'}
-        className="flex items-center gap-2 rounded-full border border-blue-line bg-ink-panel px-4 py-3 font-mono text-xs uppercase tracking-widest text-paper shadow-lg outline-none transition-colors hover:border-blue-bright data-[focus-visible]:border-blue-bright"
+        className="neon-glow flex items-center gap-2 rounded-full border border-blue-line bg-ink-panel px-4 py-3 font-mono text-xs uppercase tracking-widest text-paper shadow-lg outline-none transition-all hover:scale-105 hover:border-blue-bright data-[focus-visible]:border-blue-bright"
       >
         <MessageSquare className="h-4 w-4 text-blue-bright" />
         {open ? 'Close' : 'TALK TO MY AI'}

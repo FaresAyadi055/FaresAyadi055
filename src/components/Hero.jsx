@@ -91,17 +91,23 @@ export default function Hero() {
       <div className="relative mx-auto max-w-6xl px-6 pb-28 pt-20 md:pt-28">
         <Reveal>
           <p className="mb-6 font-mono text-xs uppercase tracking-[0.25em] text-blue-bright">
-            Schematic No. 001 — Fullstack / Automation
+            Software Engineer
           </p>
         </Reveal>
 
         <Reveal delay={80}>
           <h1 className="max-w-3xl font-mono text-4xl font-semibold leading-[1.15] text-paper md:text-6xl">
-            Fullstack systems and automation, built to spec.
+            Fares Ayadi
           </h1>
         </Reveal>
 
         <Reveal delay={160}>
+          <p className="mt-4 max-w-xl font-mono text-xl text-blue-bright md:text-2xl">
+            Fullstack systems and automation, built to spec.
+          </p>
+        </Reveal>
+
+        <Reveal delay={240}>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-paper-dim md:text-lg">
             I design, build, and ship web applications, APIs, and automation pipelines for
             small and medium businesses — from first sketch to production deploy.

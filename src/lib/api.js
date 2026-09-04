@@ -21,10 +21,11 @@ export async function fetchChatHistory(sessionId) {
 }
 
 /**
- * Sends a message to the AI spokesperson endpoint.
- * Backend route: POST /api/chat
+ * Sends a message to the AI spokesperson endpoint with streaming.
+ * Backend route: POST /api/chat (returns SSE)
+ * Calls onChunk(text) for each streamed text fragment and onDone() when complete.
  */
-export async function sendChatMessage(sessionId, messages) {
+export async function sendChatMessage(sessionId, messages, { onChunk, onDone } = {}) {
   const res = await fetch(`${API_BASE}/api/chat`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -36,7 +37,42 @@ export async function sendChatMessage(sessionId, messages) {
     throw new Error(err.error || `AI request failed (${res.status})`);
   }
 
-  return res.json(); // { reply: string }
+  if (!onChunk) {
+    const text = await res.text();
+    return { reply: text };
+  }
+
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  let fullReply = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop() || '';
+
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      const jsonStr = line.slice(6).trim();
+      if (!jsonStr || jsonStr === '[DONE]') continue;
+
+      try {
+        const data = JSON.parse(jsonStr);
+        if (data.error) throw new Error(data.error);
+        if (data.text) {
+          fullReply += data.text;
+          onChunk(data.text);
+        }
+      } catch {}
+    }
+  }
+
+  onDone?.(fullReply);
+  return { reply: fullReply };
 }
 
 /**
