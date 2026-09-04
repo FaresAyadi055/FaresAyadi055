@@ -4,21 +4,24 @@
     "description": "Platform for pet identification using smart tags, built with Svelte, Hono, and SQLite on Cloudflare. Allows owners to register pets and link them to a digital profile accessible via QR code tags.",
     "productionUrl": "https://petid.tn",
     "demoUrl": null,
-    "githubUrl": "https://github.com/FaresAyadi055/pet-id"
+    "githubUrl": "https://github.com/FaresAyadi055/pet-id",
+    "previewBroken": false
   },
-    {
+  {
     "title": "Fidelito.tn",
     "description": "digital loyalty card for small to medium businesses using a secure RFC 6238 QR code built with Svelt, Hono, SQLite",
     "productionUrl": null,
     "demoUrl": "https://fidelito-tn-demo.fablabsmu.workers.dev/",
-    "githubUrl": null
+    "githubUrl": null,
+    "previewBroken": false
   },
   {
     "title": "Smart Crop Disease Reporter",
     "description": "Android app using AI (YOLO, MobileNet, Gemini) for real-time plant disease detection. Users photograph crops and receive instant diagnoses with treatment recommendations.",
     "productionUrl": null,
     "demoUrl": null,
-    "githubUrl": "https://github.com/FaresAyadi055/smart-crop-disease-reporter"
+    "githubUrl": "https://github.com/FaresAyadi055/smart-crop-disease-reporter",
+    "previewBroken": false
   },
   {
     "title": "SMU FabLab",
@@ -26,20 +29,22 @@
     "productionUrl": "https://fablab.smu.tn",
     "demoUrl": null,
     "githubUrl": "https://github.com/FaresAyadi055/smu-fablab",
-    "previewType": "mini"
+    "previewBroken": false
   },
   {
     "title": "DevFest Hackathon",
     "description": "AI computer vision model for crop disease detection, developed during the DevFest 2024 hackathon.",
     "productionUrl": null,
     "demoUrl": "https://huggingface.co/spaces/DripKermit/Disease_Detection_in_Plants",
-    "githubUrl": null
+    "githubUrl": null,
+    "previewBroken": true
   },
   {
     "title": "Smart Home Automation",
     "description": "Voice-controlled smart home system using Arduino, Python, and custom ML models for intent recognition.",
     "productionUrl": null,
     "demoUrl": null,
-    "githubUrl": "https://github.com/FaresAyadi055/smart-home-automation"
+    "githubUrl": "https://github.com/FaresAyadi055/smart-home-automation",
+    "previewBroken": false
   }
 ]

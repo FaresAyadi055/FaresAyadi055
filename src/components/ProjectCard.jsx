@@ -1,24 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { ExternalLink, Github } from 'lucide-react';
-
-function Favicon({ url }) {
-  const [src, setSrc] = useState(null);
-
-  if (!url) return null;
-  try {
-    const origin = new URL(url).origin;
-    return (
-      <img
-        src={`${origin}/favicon.ico`}
-        alt=""
-        className="h-4 w-4 rounded-sm"
-        onError={() => setSrc(null)}
-      />
-    );
-  } catch {
-    return null;
-  }
-}
 
 function MiniBrowser({ url, linkLabel }) {
   let hostname = '';
@@ -35,7 +16,6 @@ function MiniBrowser({ url, linkLabel }) {
           <span className="h-2.5 w-2.5 rounded-full bg-green-400/30" />
         </div>
         <div className="ml-2 flex flex-1 items-center gap-1.5 rounded-sm bg-ink-deep/40 px-2 py-1">
-          <Favicon url={url} />
           <span className="truncate font-mono text-[10px] text-paper-dim/50">{hostname}</span>
         </div>
       </div>
@@ -49,32 +29,7 @@ function MiniBrowser({ url, linkLabel }) {
   );
 }
 
-function PreviewFrame({ url, isGithub, linkLabel }) {
-  const [failed, setFailed] = useState(false);
-  const [loaded, setLoaded] = useState(false);
-  const iframeRef = useRef(null);
-  const timerRef = useRef(null);
-
-  useEffect(() => {
-    if (failed || loaded || isGithub || !url) return;
-
-    timerRef.current = setTimeout(() => {
-      if (!loaded) setFailed(true);
-    }, 5000);
-
-    return () => clearTimeout(timerRef.current);
-  }, [failed, loaded, isGithub, url]);
-
-  const handleLoad = () => {
-    clearTimeout(timerRef.current);
-    setLoaded(true);
-  };
-
-  const handleError = () => {
-    clearTimeout(timerRef.current);
-    setFailed(true);
-  };
-
+function PreviewFrame({ url, isGithub, linkLabel, broken }) {
   if (isGithub) {
     return (
       <a
@@ -99,7 +54,7 @@ function PreviewFrame({ url, isGithub, linkLabel }) {
     );
   }
 
-  if (failed) {
+  if (broken) {
     return (
       <a
         href={url}
@@ -123,24 +78,16 @@ function PreviewFrame({ url, isGithub, linkLabel }) {
       rel="noopener noreferrer"
       className="group/link relative block h-40 overflow-hidden bg-ink-panel/20 transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(111,183,232,0.15)]"
     >
-      {!loaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-ink-panel/20 z-10">
-          <div className="h-5 w-5 animate-spin rounded-full border-2 border-blue-bright border-t-transparent" />
-        </div>
-      )}
       <iframe
-        ref={iframeRef}
         src={url}
         title="Project preview"
         sandbox="allow-scripts allow-same-origin"
         className="pointer-events-none absolute top-0 left-0 h-[167%] w-[150%] border-0"
         loading="lazy"
-        onLoad={handleLoad}
-        onError={handleError}
         style={{ transform: 'scale(0.6)', transformOrigin: 'top left' }}
       />
       <div className="absolute inset-0 bg-transparent transition-colors group-hover/link:bg-blue-bright/5" />
-      <span className="absolute bottom-2 right-2 rounded-sm bg-ink-deep/80 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-blue-bright backdrop-blur-sm z-10">
+      <span className="absolute bottom-2 right-2 rounded-sm bg-ink-deep/80 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-blue-bright backdrop-blur-sm">
         {linkLabel}
       </span>
     </a>
@@ -191,7 +138,7 @@ export default function ProjectCard({ project }) {
       </div>
 
       <div className="mt-3 mx-5 overflow-hidden rounded-sm border border-ink-line/50">
-        <PreviewFrame url={previewUrl} isGithub={isGithubPreview} linkLabel={linkLabel} />
+        <PreviewFrame url={previewUrl} isGithub={isGithubPreview} linkLabel={linkLabel} broken={project.previewBroken} />
       </div>
 
       <div className="flex items-center gap-4 px-5 py-3">
