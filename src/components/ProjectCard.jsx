@@ -81,7 +81,7 @@ function PreviewFrame({ url, isGithub, linkLabel, broken }) {
       <iframe
         src={url}
         title="Project preview"
-        sandbox="allow-scripts allow-same-origin"
+        sandbox="allow-scripts allow-same-origin -notification -location"
         className="pointer-events-none absolute top-0 left-0 h-[167%] w-[150%] border-0"
         loading="lazy"
         style={{ transform: 'scale(0.6)', transformOrigin: 'top left' }}
