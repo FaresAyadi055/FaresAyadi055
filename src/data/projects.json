@@ -6,6 +6,13 @@
     "demoUrl": null,
     "githubUrl": "https://github.com/FaresAyadi055/pet-id"
   },
+    {
+    "title": "Fidelito.tn",
+    "description": "digital loyalty card for small to medium businesses using a secure RFC 6238 QR code built with Svelt, Hono, SQLite",
+    "productionUrl": null,
+    "demoUrl": "https://fidelito-tn-demo.fablabsmu.workers.dev/",
+    "githubUrl": null
+  },
   {
     "title": "Smart Crop Disease Reporter",
     "description": "Android app using AI (YOLO, MobileNet, Gemini) for real-time plant disease detection. Users photograph crops and receive instant diagnoses with treatment recommendations.",
@@ -16,7 +23,7 @@
   {
     "title": "SMU FabLab",
     "description": "Inventory management system with role-based access built with Nuxt.js. Tracks equipment, manages bookings, and handles member access for the university fabrication laboratory.",
-    "productionUrl": null,
+    "productionUrl": "https://fablab.smu.tn",
     "demoUrl": null,
     "githubUrl": "https://github.com/FaresAyadi055/smu-fablab"
   },
@@ -24,7 +31,7 @@
     "title": "DevFest Hackathon",
     "description": "AI computer vision model for crop disease detection, developed during the DevFest 2024 hackathon.",
     "productionUrl": null,
-    "demoUrl": "https://huggingface.co/spaces/DripKermit/Disease_Detection_in_Plants?logs=build",
+    "demoUrl": "https://huggingface.co/spaces/DripKermit/Disease_Detection_in_Plants",
     "githubUrl": null
   },
   {
