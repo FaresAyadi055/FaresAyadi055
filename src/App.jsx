@@ -11,8 +11,16 @@ import Footer from './components/Footer.jsx';
 import Admin from './components/Admin.jsx';
 import { trackEvent } from './lib/api.js';
 
+function getRouteFromQuery() {
+  const search = window.location.search;
+  if (search.startsWith('?/')) {
+    return search.slice(1).split('&')[0].replace(/~and~/g, '&');
+  }
+  return window.location.pathname;
+}
+
 export default function App() {
-  const [isAdmin, setIsAdmin] = useState(window.location.pathname === '/admin');
+  const [isAdmin, setIsAdmin] = useState(getRouteFromQuery() === '/admin');
 
   useEffect(() => {
     trackEvent({ type: 'page_view' });
@@ -20,7 +28,7 @@ export default function App() {
 
   useEffect(() => {
     function onPopState() {
-      setIsAdmin(window.location.pathname === '/admin');
+      setIsAdmin(getRouteFromQuery() === '/admin');
     }
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
