@@ -82,6 +82,8 @@ function PreviewFrame({ url, isGithub, linkLabel, broken }) {
         src={url}
         title="Project preview"
         sandbox="allow-scripts allow-same-origin"
+        allow="geolocation 'none'; microphone 'none'; camera 'none'; midi 'none'; payment 'none'; usb 'none'; serial 'none'; bluetooth 'none'; hid 'none'; magnetometer 'none'; gyroscope 'none'; accelerometer 'none'; ambient-light-sensor 'none'; display-capture 'none'; clipboard-read 'none'; clipboard-write 'none'; publickey-credentials-get 'none'; screen-wake-lock 'none'; web-share 'none'; xr-spatial-tracking 'none'; idle-detection 'none'; window-management 'none'; fullscreen 'none'; picture-in-picture 'none'; autoplay 'none'; encrypted-media 'none'"
+        referrerPolicy="no-referrer"
         className="pointer-events-none absolute top-0 left-0 h-[167%] w-[150%] border-0"
         loading="lazy"
         style={{ transform: 'scale(0.6)', transformOrigin: 'top left' }}
