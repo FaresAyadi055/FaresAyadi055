@@ -1,9 +1,11 @@
 // Base URL of the backend.
-// In dev, Vite proxies /api to the backend.
-// In production, use the deployed backend origin.
-const API_BASE = import.meta.env.MODE === 'development' 
-  ? '' 
-  : 'https://client-service-backend.faresayadi055.workers.dev';
+// In dev, Vite proxies /api to the backend, so API_BASE stays empty.
+// In production, prefer VITE_API_BASE_URL (set via .env.production locally,
+// or the VITE_API_BASE_URL repo secret in the GitHub Actions build) and
+// fall back to the known deployed worker if it isn't set.
+const API_BASE = import.meta.env.MODE === 'development'
+  ? ''
+  : import.meta.env.VITE_API_BASE_URL || 'https://client-service-backend.faresayadi055.workers.dev';
 
 /**
  * Fetches existing chat messages for a session.

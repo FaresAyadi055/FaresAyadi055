@@ -56,7 +56,8 @@ export default function Chatbot() {
     const text = input.trim();
     if (!text || sending || !sessionId) return;
 
-    const nextMessages = [...messages, { role: 'user', content: text }];
+    const now = Date.now();
+    const nextMessages = [...messages, { role: 'user', content: text, timestamp: now }];
     setMessages(nextMessages);
     setInput('');
     setError(null);
@@ -64,7 +65,7 @@ export default function Chatbot() {
 
     try {
       const { reply } = await sendChatMessage(sessionId, nextMessages);
-      setMessages((prev) => [...prev, { role: 'assistant', content: reply }]);
+      setMessages((prev) => [...prev, { role: 'assistant', content: reply, timestamp: Date.now() }]);
     } catch (err) {
       setError('The assistant is unreachable right now — try email or WhatsApp instead.');
     } finally {
@@ -104,18 +105,23 @@ export default function Chatbot() {
 
           <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
             {messages.map((m, i) => (
-              <div
-                key={i}
-                className={`max-w-[85%] rounded-sm px-3 py-2 text-sm leading-relaxed ${
-                  m.role === 'user'
-                    ? 'ml-auto bg-blue-line/30 text-paper'
-                    : 'border border-ink-line bg-ink-panel/40 text-paper-dim'
-                }`}
-              >
-                {m.role === 'user'
-                  ? m.content
-                  : <div className="markdown"><ReactMarkdown>{m.content}</ReactMarkdown></div>}
-              </div>
+                <div
+                  key={i}
+                  className={`max-w-[85%] rounded-sm px-3 py-2 text-sm leading-relaxed ${
+                    m.role === 'user'
+                      ? 'ml-auto bg-blue-line/30 text-paper'
+                      : 'border border-ink-line bg-ink-panel/40 text-paper-dim'
+                  }`}
+                >
+                  {m.role === 'user'
+                    ? m.content
+                    : <div className="markdown"><ReactMarkdown>{m.content}</ReactMarkdown></div>}
+                  {m.timestamp && (
+                    <p className="mt-1 font-mono text-[10px] opacity-60">
+                      {new Date(m.timestamp).toLocaleTimeString()}
+                    </p>
+                  )}
+                </div>
             ))}
             {sending && (
               <div className="max-w-[85%] rounded-sm border border-ink-line bg-ink-panel/40 px-4 py-3 text-sm text-paper-dim">

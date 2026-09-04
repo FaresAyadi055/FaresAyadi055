@@ -1,2 +1,9 @@
 .env
 node_modules
+
+# Build output — GitHub Actions (.github/workflows/deploy.yml) builds this
+# fresh on every push and publishes it to the gh-pages branch. Committing it
+# to main lets a stale local build drift from source and get deployed by
+# mistake.
+dist/
+

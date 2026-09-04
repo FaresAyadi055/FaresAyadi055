@@ -12,12 +12,17 @@ function ChatSession({ session, onLoad, onDelete }) {
       >
         Session: {session.id.slice(0, 8)}…
       </button>
-      <button
-        onClick={() => onDelete(session.id)}
-        className="rounded-sm border border-copper px-3 py-1 font-mono text-xs text-copper outline-none transition-colors hover:bg-copper hover:text-ink-deep"
-      >
-        Delete
-      </button>
+      <div className="flex items-center gap-4">
+        <span className="font-mono text-xs text-paper-dim">
+          {new Date(session.createdAt).toLocaleString()}
+        </span>
+        <button
+          onClick={() => onDelete(session.id)}
+          className="rounded-sm border border-copper px-3 py-1 font-mono text-xs text-copper outline-none transition-colors hover:bg-copper hover:text-ink-deep"
+        >
+          Delete
+        </button>
+      </div>
     </div>
   );
 }
@@ -228,9 +233,14 @@ export default function Admin({ onClose }) {
                       : 'border border-ink-line bg-ink-panel/40 text-paper-dim max-w-[80%]'
                   }`}
                 >
-                  <p className="font-mono text-[11px] uppercase tracking-wider mb-1 text-paper-dim">
-                    {m.role}
-                  </p>
+                  <div className="flex justify-between mb-1">
+                    <p className="font-mono text-[11px] uppercase tracking-wider text-paper-dim">
+                      {m.role}
+                    </p>
+                    <p className="font-mono text-[10px] text-paper-dim/60">
+                      {new Date(m.timestamp).toLocaleTimeString()}
+                    </p>
+                  </div>
                   <ReactMarkdown>{m.content}</ReactMarkdown>
                 </div>
               ))}
