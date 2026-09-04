@@ -24,8 +24,8 @@
     "title": "DevFest Hackathon",
     "description": "AI computer vision model for crop disease detection, developed during the DevFest 2024 hackathon.",
     "productionUrl": null,
-    "demoUrl": null,
-    "githubUrl": "https://github.com/FaresAyadi055/devfest-hackathon"
+    "demoUrl": "https://huggingface.co/spaces/DripKermit/Disease_Detection_in_Plants?logs=build",
+    "githubUrl": null
   },
   {
     "title": "Smart Home Automation",
