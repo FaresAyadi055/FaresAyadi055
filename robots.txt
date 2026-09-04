@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.FaresAyadi.dev/sitemap.xml
+Sitemap: https://www.faresayadi.github.io/sitemap.xml
