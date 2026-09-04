@@ -25,10 +25,19 @@
   },
       {
     "title": "physicshub",
-    "description": "Did a major contribution on physicas hub an open-source project that helps students study physics by visualizing formulas with interactive simulations buy fixing 3 bugs and adding i18n localization from scratch.",
+    "description": "Did a major contribution on physicas hub an open-source project that helps students study physics by visualizing formulas with interactive simulations by fixing 3 bugs and adding i18n localization from scratch.",
     "productionUrl": "https://physicshub.github.io/",
     "demoUrl": "null",
     "githubUrl": "https://github.com/FaresAyadi055/physicshub.github.ios",
+    "previewBroken": false
+  },
+  
+        {
+    "title": "UniTasks",
+    "description": "A complete full-stack web application for managing school tasks with role-based access control for Admin, Teachers, and Students.",
+    "productionUrl": "",
+    "demoUrl": "https://faresayadi055.github.io/Project-web-medtech/",
+    "githubUrl": "https://github.com/FaresAyadi055/Project-web-medtech",
     "previewBroken": false
   },
   {
@@ -37,6 +46,14 @@
     "productionUrl": null,
     "demoUrl": null,
     "githubUrl": "https://github.com/FaresAyadi055/smart-crop-disease-reporter",
+    "previewBroken": false
+  },
+    {
+    "title": "Reddit_Listner",
+    "description": "a reddit_listener that dectect new posts across multiple subreddits via RSS then filter them with an ai via Groq api and posts of interests like job opportunities and side gigs are sent via telegram bot",
+    "productionUrl": null,
+    "demoUrl": null,
+    "githubUrl": "https://github.com/FaresAyadi055/reddit_listener",
     "previewBroken": false
   },
   {
