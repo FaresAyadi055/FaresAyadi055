@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ExternalLink, Github } from 'lucide-react';
 
 function Favicon({ url }) {
@@ -50,6 +50,31 @@ function MiniBrowser({ url, linkLabel }) {
 }
 
 function PreviewFrame({ url, isGithub, linkLabel }) {
+  const [failed, setFailed] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const iframeRef = useRef(null);
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    if (failed || loaded || isGithub || !url) return;
+
+    timerRef.current = setTimeout(() => {
+      if (!loaded) setFailed(true);
+    }, 5000);
+
+    return () => clearTimeout(timerRef.current);
+  }, [failed, loaded, isGithub, url]);
+
+  const handleLoad = () => {
+    clearTimeout(timerRef.current);
+    setLoaded(true);
+  };
+
+  const handleError = () => {
+    clearTimeout(timerRef.current);
+    setFailed(true);
+  };
+
   if (isGithub) {
     return (
       <a
@@ -74,16 +99,48 @@ function PreviewFrame({ url, isGithub, linkLabel }) {
     );
   }
 
+  if (failed) {
+    return (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group/link relative block overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(111,183,232,0.15)]"
+      >
+        <MiniBrowser url={url} linkLabel={linkLabel} />
+        <div className="absolute inset-0 bg-transparent transition-colors group-hover/link:bg-blue-bright/5" />
+        <span className="absolute bottom-2 right-2 rounded-sm bg-ink-deep/80 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-blue-bright backdrop-blur-sm">
+          {linkLabel}
+        </span>
+      </a>
+    );
+  }
+
   return (
     <a
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group/link relative block overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(111,183,232,0.15)]"
+      className="group/link relative block h-40 overflow-hidden bg-ink-panel/20 transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(111,183,232,0.15)]"
     >
-      <MiniBrowser url={url} linkLabel={linkLabel} />
+      {!loaded && (
+        <div className="absolute inset-0 flex items-center justify-center bg-ink-panel/20 z-10">
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-blue-bright border-t-transparent" />
+        </div>
+      )}
+      <iframe
+        ref={iframeRef}
+        src={url}
+        title="Project preview"
+        sandbox="allow-scripts allow-same-origin"
+        className="pointer-events-none absolute top-0 left-0 h-[167%] w-[150%] border-0"
+        loading="lazy"
+        onLoad={handleLoad}
+        onError={handleError}
+        style={{ transform: 'scale(0.6)', transformOrigin: 'top left' }}
+      />
       <div className="absolute inset-0 bg-transparent transition-colors group-hover/link:bg-blue-bright/5" />
-      <span className="absolute bottom-2 right-2 rounded-sm bg-ink-deep/80 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-blue-bright backdrop-blur-sm">
+      <span className="absolute bottom-2 right-2 rounded-sm bg-ink-deep/80 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-blue-bright backdrop-blur-sm z-10">
         {linkLabel}
       </span>
     </a>
