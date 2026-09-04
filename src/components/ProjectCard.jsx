@@ -1,6 +1,54 @@
 import { useState } from 'react';
 import { ExternalLink, Github } from 'lucide-react';
 
+function Favicon({ url }) {
+  const [src, setSrc] = useState(null);
+
+  if (!url) return null;
+  try {
+    const origin = new URL(url).origin;
+    return (
+      <img
+        src={`${origin}/favicon.ico`}
+        alt=""
+        className="h-4 w-4 rounded-sm"
+        onError={() => setSrc(null)}
+      />
+    );
+  } catch {
+    return null;
+  }
+}
+
+function MiniBrowser({ url, linkLabel }) {
+  let hostname = '';
+  try {
+    hostname = new URL(url).hostname;
+  } catch {}
+
+  return (
+    <div className="flex h-40 flex-col bg-ink-panel/20">
+      <div className="flex items-center gap-2 border-b border-ink-line/30 bg-ink-panel/40 px-3 py-2">
+        <div className="flex gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-full bg-copper/40" />
+          <span className="h-2.5 w-2.5 rounded-full bg-blue-bright/30" />
+          <span className="h-2.5 w-2.5 rounded-full bg-green-400/30" />
+        </div>
+        <div className="ml-2 flex flex-1 items-center gap-1.5 rounded-sm bg-ink-deep/40 px-2 py-1">
+          <Favicon url={url} />
+          <span className="truncate font-mono text-[10px] text-paper-dim/50">{hostname}</span>
+        </div>
+      </div>
+      <div className="flex flex-1 items-center justify-center">
+        <div className="text-center">
+          <img src="/favicon.svg" alt="" className="mx-auto mb-2 h-8 w-8 opacity-30" />
+          <p className="font-mono text-[10px] text-paper-dim/40">{hostname}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function PreviewFrame({ url, isGithub, linkLabel }) {
   if (isGithub) {
     return (
@@ -31,16 +79,9 @@ function PreviewFrame({ url, isGithub, linkLabel }) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group/link relative block h-40 overflow-hidden bg-ink-panel/20 transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(111,183,232,0.15)]"
+      className="group/link relative block overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(111,183,232,0.15)]"
     >
-      <iframe
-        src={url}
-        title="Project preview"
-        sandbox="allow-scripts allow-same-origin"
-        className="pointer-events-none absolute top-0 left-0 h-[167%] w-[150%] border-0"
-        loading="lazy"
-        style={{ transform: 'scale(0.6)', transformOrigin: 'top left' }}
-      />
+      <MiniBrowser url={url} linkLabel={linkLabel} />
       <div className="absolute inset-0 bg-transparent transition-colors group-hover/link:bg-blue-bright/5" />
       <span className="absolute bottom-2 right-2 rounded-sm bg-ink-deep/80 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-blue-bright backdrop-blur-sm">
         {linkLabel}
