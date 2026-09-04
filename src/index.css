@@ -6,6 +6,39 @@
   color-scheme: dark;
 }
 
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
+html[data-theme="light"] body {
+  background-color: #f0f4f8;
+  background-image: none;
+  color: #1a2a3a;
+}
+
+html[data-theme="light"] .bg-ink-deep { background-color: #f0f4f8; }
+html[data-theme="light"] .bg-ink-panel { background-color: #e2e8f0; }
+html[data-theme="light"] .bg-ink-panel\/30 { background-color: rgba(226, 232, 240, 0.3); }
+html[data-theme="light"] .bg-ink-panel\/40 { background-color: rgba(226, 232, 240, 0.4); }
+html[data-theme="light"] .bg-ink-panel\/60 { background-color: rgba(226, 232, 240, 0.6); }
+html[data-theme="light"] .bg-ink-deep\/85 { background-color: rgba(240, 244, 248, 0.85); }
+html[data-theme="light"] .bg-ink-deep\/95 { background-color: rgba(240, 244, 248, 0.95); }
+html[data-theme="light"] .bg-ink-deep\/80 { background-color: rgba(240, 244, 248, 0.8); }
+html[data-theme="light"] .text-paper { color: #1a2a3a; }
+html[data-theme="light"] .text-paper-dim { color: #4a6070; }
+html[data-theme="light"] .text-paper-dim\/60 { color: rgba(74, 96, 112, 0.6); }
+html[data-theme="light"] .text-paper-dim\/30 { color: rgba(74, 96, 112, 0.3); }
+html[data-theme="light"] .border-ink-line { border-color: #c0d0e0; }
+html[data-theme="light"] .border-ink-line\/70 { border-color: rgba(192, 208, 224, 0.7); }
+html[data-theme="light"] .border-ink-line\/50 { border-color: rgba(192, 208, 224, 0.5); }
+html[data-theme="light"] .hover\:bg-ink-panel\/40:hover { background-color: rgba(226, 232, 240, 0.4); }
+html[data-theme="light"] .hover\:text-paper:hover { color: #1a2a3a; }
+html[data-theme="light"] .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); }
+html[data-theme="light"] .bg-blue-line\/20 { background-color: rgba(62, 124, 177, 0.15); }
+html[data-theme="light"] .bg-blue-line\/30 { background-color: rgba(62, 124, 177, 0.2); }
+html[data-theme="light"] .bg-ink-deep\/80 { background-color: rgba(240, 244, 248, 0.8); }
+html[data-theme="light"] .bg-ink-panel\/20 { background-color: rgba(226, 232, 240, 0.2); }
+
 html {
   scroll-behavior: smooth;
 }
@@ -236,5 +269,10 @@ body {
 .cursor-blink {
   animation: cursor-blink 0.7s step-end infinite;
   color: #6fb7e8;
+}
+
+/* Hide scrollbar on project cards */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }
 

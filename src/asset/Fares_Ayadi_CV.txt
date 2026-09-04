@@ -1,0 +1,76 @@
+Full Name: Fares Ayadi
+Phone: +21628270640 | Email: faresayadi055@gmail.com
+LinkedIn: linkedin.com/in/fares-ayadi-13267127b
+GitHub: FaresAyadi055 | Kaggle: faresayadi055
+
+About Me
+Software engineering student seeking with 2 years of hands on experience looking for new projects to work on. 
+
+Education
+South Mediterranean University MedTech Software Engineering Program
+2025 - 2026
+
+South Mediterranean University MedTech Pre-Engineering Program
+2023 - 2025
+
+Baccalaureate of Experimental Science Diploma
+2022 - 2023
+
+Certificates
+- AI Engineering Professional Certificate – IBM
+- Databases and SQL for Data Science with Python – IBM
+- Python for Data Science & AI Development – IBM
+- Generative AI: Prompt Engineering Basics – IBM
+
+Languages
+- Arabic: Native
+- English: Fluent
+- French: Fluent
+- German: Basic
+
+Skills
+Programming Languages: Python, Java, C, SQL, HTML/CSS/JavaScript/TypeScript
+Frontend Frameworks: React, Vue, Svelt
+Backend Frameworks: Express, Flask, Next, Nuxt, Hono
+Mobile Development: React Native, Android Studio
+Data Bases: MySQL, PostgreSQL, MongoDB, SQLite
+Data Science/ AI Frameworks: Numpy, Pandas, Matplotlib, PyTorch, Scikit-learn, Flask
+Skills: Prompt Engineering, Machine Learning, Deep Learning, Computer Vision, Automation with Python, mobile development,
+Fullstack development
+
+Experience:
+
+Freshman Project smart home automation (2023)
+- Built a voice-controlled smart house model with IoT integration (lights, fans, garage, TV, etc.), data collected via MySQL on a Flask server.
+	repo : https://github.com/FaresAyadi055/voice-controlled-smart-home-automation-project
+UBCI Internship (2024)
+- Observation Internship, Documented IT department operations, focusing on data security and IT responsibilities.
+
+DevFest Hackathon (2024)
+- Developed an AI computer vision model for disease detection in crops.
+	HuggingFace: https://huggingface.co/spaces/DripKermit/Disease_Detection_in_Plants
+
+SMU MakerSpace (2025)
+- Built an inventory management system with a semantic search feature using Python, MySQL, and sentence transformers.
+	repo : https://github.com/FaresAyadi055/makerspace
+Sophomore project:
+- web application designed to enhance healthcare accessibility and streamline personal health management
+repo: https://github.com/FaresAyadi055/ISS296.git
+
+Mabruka Intership (2025):
+- trained an olive tree variety classification vision model trained on images of olive leaves from 14 varieties
+
+SMU FabLab (2026)
+- Built an inventory management system using Nuxt js with admin, students, instructors roles.
+	repo : https://github.com/FaresAyadi055/SMU_Labs
+- Junior project Smart crop Disease reporter (2026):
+ - built an android app that utilizes an ai pipeline that detect tree leaves, identify the specie and scan for diseases. It uses yolo nano v8 for detection and segmentation, mobilenetv2-224 for classification and gemini-flash-preview for report generation. 
+	 repo: https://github.com/FaresAyadi055/ISS396.git
+Pet ID.tn startup (2026):
+- built a platform for registering and Identifying Pets using smart pet tag containing QR codes or NFC tags with a unique ID, the app also has features like instant scan notification and outsourcing tough notification broadcast. App built with Svelt, Hono, SQLite and deployed on cloudflare.
+URL: https://petid.tn
+
+References
+Amine Ben Hassouna
+Lab Instructor, South Mediterranean University
+Phone: +216 55258528

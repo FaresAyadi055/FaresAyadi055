@@ -1,5 +1,6 @@
 import { Button, Link } from 'react-aria-components';
 import Reveal from './Reveal.jsx';
+import cvPdf from '../asset/Fares_Ayadi_CV.pdf';
 
 const CIRCUIT_PATH = 'M40 460 L180 460 L180 340 L300 340 L300 420 L520 420';
 
@@ -117,16 +118,22 @@ export default function Hero() {
         <Reveal delay={240}>
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <Button
-              onPress={() => scrollTo('contact')}
+              onPress={() => window.open(cvPdf, '_blank')}
               className="rounded-sm bg-copper px-6 py-3 font-mono text-sm uppercase tracking-widest text-ink-deep outline-none transition-transform hover:scale-[1.02] data-[focus-visible]:scale-[1.02]"
             >
-              Start a project
+              View my CV
             </Button>
             <Link
               onPress={() => scrollTo('stack')}
               className="cursor-pointer rounded-sm border border-blue-line px-6 py-3 font-mono text-sm uppercase tracking-widest text-paper outline-none transition-colors hover:border-blue-bright hover:text-blue-bright data-[focus-visible]:border-blue-bright data-[focus-visible]:text-blue-bright"
             >
               View the stack
+            </Link>
+            <Link
+              onPress={() => scrollTo('projects')}
+              className="cursor-pointer rounded-sm border border-blue-line px-6 py-3 font-mono text-sm uppercase tracking-widest text-paper outline-none transition-colors hover:border-blue-bright hover:text-blue-bright data-[focus-visible]:border-blue-bright data-[focus-visible]:text-blue-bright"
+            >
+              View projects
             </Link>
           </div>
         </Reveal>

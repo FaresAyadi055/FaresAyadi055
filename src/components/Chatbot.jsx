@@ -149,7 +149,7 @@ export default function Chatbot() {
               <img
                 src={benderIcon}
                 alt="Bender"
-                className="-mt-2 h-9 w-9 rounded-full border border-blue-line bg-ink-deep object-contain p-0.5"
+                className="-mt-2 h-9 w-9 scale-125 rounded-full border border-blue-line bg-ink-deep object-contain p-0.5"
               />
               <div>
                 <p className="font-mono text-xs uppercase tracking-widest text-blue-bright">Bender</p>

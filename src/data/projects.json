@@ -1,0 +1,37 @@
+[
+  {
+    "title": "Pet ID.tn",
+    "description": "Platform for pet identification using smart tags, built with Svelte, Hono, and SQLite on Cloudflare. Allows owners to register pets and link them to a digital profile accessible via QR code tags.",
+    "productionUrl": "https://petid.tn",
+    "demoUrl": null,
+    "githubUrl": "https://github.com/FaresAyadi055/pet-id"
+  },
+  {
+    "title": "Smart Crop Disease Reporter",
+    "description": "Android app using AI (YOLO, MobileNet, Gemini) for real-time plant disease detection. Users photograph crops and receive instant diagnoses with treatment recommendations.",
+    "productionUrl": null,
+    "demoUrl": null,
+    "githubUrl": "https://github.com/FaresAyadi055/smart-crop-disease-reporter"
+  },
+  {
+    "title": "SMU FabLab",
+    "description": "Inventory management system with role-based access built with Nuxt.js. Tracks equipment, manages bookings, and handles member access for the university fabrication laboratory.",
+    "productionUrl": null,
+    "demoUrl": null,
+    "githubUrl": "https://github.com/FaresAyadi055/smu-fablab"
+  },
+  {
+    "title": "DevFest Hackathon",
+    "description": "AI computer vision model for crop disease detection, developed during the DevFest 2024 hackathon.",
+    "productionUrl": null,
+    "demoUrl": null,
+    "githubUrl": "https://github.com/FaresAyadi055/devfest-hackathon"
+  },
+  {
+    "title": "Smart Home Automation",
+    "description": "Voice-controlled smart home system using Arduino, Python, and custom ML models for intent recognition.",
+    "productionUrl": null,
+    "demoUrl": null,
+    "githubUrl": "https://github.com/FaresAyadi055/smart-home-automation"
+  }
+]

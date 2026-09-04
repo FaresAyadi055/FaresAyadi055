@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Button, Link } from 'react-aria-components';
+import { Sun, Moon } from 'lucide-react';
 
 const NAV_LINKS = [
   { id: 'services', label: 'Services' },
+  { id: 'projects', label: 'Projects' },
   { id: 'stack', label: 'Stack' },
   { id: 'process', label: 'Process' },
   { id: 'contact', label: 'Contact' },
@@ -16,6 +18,16 @@ export default function Navbar({ onOpenAdmin }) {
   const isAdmin = !!localStorage.getItem('ADMIN_ACCESS_TOKEN');
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState('top');
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  function toggleTheme() {
+    setTheme((t) => (t === 'dark' ? 'light' : 'dark'));
+  }
 
   useEffect(() => {
     function onScroll() {
@@ -86,12 +98,21 @@ export default function Navbar({ onOpenAdmin }) {
           )}
         </nav>
 
-        <Button
-          onPress={() => scrollTo('contact')}
-          className="rounded-sm border border-copper px-4 py-2 font-mono text-xs uppercase tracking-widest text-copper outline-none transition-colors hover:bg-copper hover:text-ink-deep data-[focus-visible]:bg-copper data-[focus-visible]:text-ink-deep"
-        >
-          Start a project
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button
+            onPress={toggleTheme}
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            className="grid h-9 w-9 place-items-center rounded-sm border border-ink-line text-paper-dim outline-none transition-colors hover:border-blue-bright hover:text-blue-bright data-[focus-visible]:border-blue-bright"
+          >
+            {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </Button>
+          <Button
+            onPress={() => scrollTo('contact')}
+            className="rounded-sm border border-copper px-4 py-2 font-mono text-xs uppercase tracking-widest text-copper outline-none transition-colors hover:bg-copper hover:text-ink-deep data-[focus-visible]:bg-copper data-[focus-visible]:text-ink-deep"
+          >
+            Start a project
+          </Button>
+        </div>
       </div>
     </header>
   );
