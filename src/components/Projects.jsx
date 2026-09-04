@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Reveal from './Reveal.jsx';
 import ProjectCard from './ProjectCard.jsx';
@@ -6,6 +6,33 @@ import projects from '../data/projects.json';
 
 export default function Projects() {
   const scrollRef = useRef(null);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+
+  const onMouseDown = useCallback((e) => {
+    if (!scrollRef.current) return;
+    isDragging.current = true;
+    startX.current = e.pageX - scrollRef.current.offsetLeft;
+    scrollLeft.current = scrollRef.current.scrollLeft;
+    scrollRef.current.style.cursor = 'grabbing';
+    scrollRef.current.style.userSelect = 'none';
+  }, []);
+
+  const onMouseMove = useCallback((e) => {
+    if (!isDragging.current || !scrollRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX.current) * 1.5;
+    scrollRef.current.scrollLeft = scrollLeft.current - walk;
+  }, []);
+
+  const onMouseUp = useCallback(() => {
+    if (!scrollRef.current) return;
+    isDragging.current = false;
+    scrollRef.current.style.cursor = 'grab';
+    scrollRef.current.style.userSelect = '';
+  }, []);
 
   function scroll(direction) {
     if (!scrollRef.current) return;
@@ -45,7 +72,11 @@ export default function Projects() {
         <div
           ref={scrollRef}
           className="flex gap-5 overflow-x-auto pb-4 scrollbar-none"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', cursor: 'grab' }}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          onMouseLeave={onMouseUp}
         >
           {projects.map((project, i) => (
             <Reveal key={i} delay={i * 100}>
