@@ -23,6 +23,14 @@
     "githubUrl": null,
     "previewBroken": false
   },
+      {
+    "title": "physicshub",
+    "description": "Did a major contribution on physicas hub an open-source project that helps students study physics by visualizing formulas with interactive simulations buy fixing 3 bugs and adding i18n localization from scratch.",
+    "productionUrl": "https://physicshub.github.io/",
+    "demoUrl": "null",
+    "githubUrl": "https://github.com/FaresAyadi055/physicshub.github.ios",
+    "previewBroken": false
+  },
   {
     "title": "Smart Crop Disease Reporter",
     "description": "Android app using AI (YOLO, MobileNet, Gemini) for real-time plant disease detection. Users photograph crops and receive instant diagnoses with treatment recommendations.",
