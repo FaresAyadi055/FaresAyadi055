@@ -30,6 +30,8 @@ function MiniBrowser({ url, linkLabel }) {
 }
 
 function PreviewFrame({ url, isGithub, linkLabel, broken }) {
+  const [imgFailed, setImgFailed] = useState(false);
+
   if (isGithub) {
     return (
       <a
@@ -46,30 +48,26 @@ function PreviewFrame({ url, isGithub, linkLabel, broken }) {
     );
   }
 
-  if (!url) {
-    return (
-      <div className="flex h-40 items-center justify-center bg-ink-panel/30">
-        <img src="/favicon.svg" alt="Preview unavailable" className="h-10 w-10 opacity-40" />
-      </div>
-    );
-  }
-
-  if (broken) {
+  if (!url || broken || imgFailed) {
     return (
       <a
-        href={url}
+        href={url || undefined}
         target="_blank"
         rel="noopener noreferrer"
-        className="group/link relative block overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(111,183,232,0.15)]"
+        className={`group/link relative block overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(111,183,232,0.15)] ${!url ? 'pointer-events-none' : ''}`}
       >
         <MiniBrowser url={url} linkLabel={linkLabel} />
         <div className="absolute inset-0 bg-transparent transition-colors group-hover/link:bg-blue-bright/5" />
-        <span className="absolute bottom-2 right-2 rounded-sm bg-ink-deep/80 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-blue-bright backdrop-blur-sm">
-          {linkLabel}
-        </span>
+        {url && (
+          <span className="absolute bottom-2 right-2 rounded-sm bg-ink-deep/80 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-blue-bright backdrop-blur-sm">
+            {linkLabel}
+          </span>
+        )}
       </a>
     );
   }
+
+  const screenshotUrl = `https://s.wordpress.com/mshots/v1/${encodeURIComponent(url)}`;
 
   return (
     <a
@@ -78,15 +76,12 @@ function PreviewFrame({ url, isGithub, linkLabel, broken }) {
       rel="noopener noreferrer"
       className="group/link relative block h-40 overflow-hidden bg-ink-panel/20 transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(111,183,232,0.15)]"
     >
-      <iframe
-        src={url}
-        title="Project preview"
-        sandbox="allow-scripts allow-same-origin"
-        allow="geolocation 'none'; microphone 'none'; camera 'none'; midi 'none'; payment 'none'; usb 'none'; serial 'none'; bluetooth 'none'; hid 'none'; magnetometer 'none'; gyroscope 'none'; accelerometer 'none'; ambient-light-sensor 'none'; display-capture 'none'; clipboard-read 'none'; clipboard-write 'none'; publickey-credentials-get 'none'; screen-wake-lock 'none'; web-share 'none'; xr-spatial-tracking 'none'; idle-detection 'none'; window-management 'none'; fullscreen 'none'; picture-in-picture 'none'; autoplay 'none'; encrypted-media 'none'"
-        referrerPolicy="no-referrer"
-        className="pointer-events-none absolute top-0 left-0 h-[167%] w-[150%] border-0"
+      <img
+        src={screenshotUrl}
+        alt="Project preview"
         loading="lazy"
-        style={{ transform: 'scale(0.6)', transformOrigin: 'top left' }}
+        onError={() => setImgFailed(true)}
+        className="absolute top-0 left-0 h-full w-full object-cover object-top opacity-90 transition-opacity group-hover/link:opacity-100"
       />
       <div className="absolute inset-0 bg-transparent transition-colors group-hover/link:bg-blue-bright/5" />
       <span className="absolute bottom-2 right-2 rounded-sm bg-ink-deep/80 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-blue-bright backdrop-blur-sm">
