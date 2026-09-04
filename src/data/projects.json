@@ -15,6 +15,14 @@
     "githubUrl": null,
     "previewBroken": false
   },
+    {
+    "title": "medease",
+    "description": "MedEase is an intuitive web application built with Vue 3 designed to enhance healthcare accessibility and streamline personal health management",
+    "productionUrl": null,
+    "demoUrl": "https://faresayadi055.github.io/ISS296/",
+    "githubUrl": null,
+    "previewBroken": false
+  },
   {
     "title": "Smart Crop Disease Reporter",
     "description": "Android app using AI (YOLO, MobileNet, Gemini) for real-time plant disease detection. Users photograph crops and receive instant diagnoses with treatment recommendations.",
