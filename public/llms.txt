@@ -1,0 +1,45 @@
+# Fares Ayadi — Freelance Fullstack Developer & Automation Engineer
+
+> Fullstack systems and automation, built to spec. I design, build, and ship web applications, APIs, and automation pipelines for small and medium businesses.
+
+## About
+
+Freelance fullstack software engineer specializing in custom website building, web app development, and business process automation. Available for hire on a project basis.
+
+## Services
+
+- **Fullstack web development** — Marketing sites, dashboards, and web apps built with React, Vue, or Svelte on the front end and Flask, Hono, or a custom API on the back. Responsive, fast, and easy for your team to update.
+- **Business process automation** — Scripted workflows that remove manual, repetitive work — data entry, report generation, file processing, and system-to-system syncing — using Python.
+- **APIs & backend systems** — Clean, documented REST APIs backed by MySQL, PostgreSQL, MongoDB, or SQLite — sized to the business, not over-engineered for a scale you do not have yet.
+- **Data tooling & light ML** — Reporting, dashboards, and forecasting built on NumPy, Pandas, Matplotlib, Scikit-learn, and PyTorch — turning spreadsheets and logs into decisions.
+
+## Tech Stack
+
+- **Frontend:** React, Vue, Svelte, Tailwind CSS, TypeScript
+- **Backend:** Python, Flask, Hono, Node.js, Express
+- **Databases:** MySQL, PostgreSQL, MongoDB, SQLite, Turso
+- **Cloud/Infra:** Cloudflare Workers, Vercel, Docker, Linux
+- **Tools:** Git, GitHub Actions, REST APIs, WebSockets
+
+## Notable Projects
+
+- **Pet ID.tn** — Platform for pet identification using smart tags, built with Svelte, Hono, and SQLite on Cloudflare.
+- **Fidelito.tn** — Digital loyalty card for small to medium businesses using a secure RFC 6238 QR code.
+- **SMU FabLab** — Inventory management system with role-based access built with Nuxt.js.
+- **Smart Crop Disease Reporter** — Android app using AI (YOLO, MobileNet, Gemini) for real-time plant disease detection.
+
+## Contact
+
+- Email: faresayadi055@gmail.com
+- GitHub: https://github.com/FaresAyadi055
+- LinkedIn: https://www.linkedin.com/in/fares-ayadi-13267127b
+- WhatsApp: +216 28270640
+- Discord: drip_kermit
+
+## Location
+
+Tunisia — available for remote work worldwide.
+
+## Response Time
+
+I reply within one business day.

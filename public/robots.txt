@@ -1,4 +1,18 @@
 User-agent: *
 Allow: /
+Disallow: /admin
 
-Sitemap: https://www.faresayadi.github.io/sitemap.xml
+Sitemap: https://faresayadi055.github.io/sitemap.xml
+
+# AI crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
