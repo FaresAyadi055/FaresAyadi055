@@ -27,7 +27,7 @@
     "title": "physicshub",
     "description": "Did a major contribution on physicas hub an open-source project that helps students study physics by visualizing formulas with interactive simulations by fixing 3 bugs and adding i18n localization from scratch.",
     "productionUrl": "https://physicshub.github.io/",
-    "demoUrl": "null",
+    "demoUrl": null,
     "githubUrl": "https://github.com/FaresAyadi055/physicshub.github.ios",
     "previewBroken": false
   },
